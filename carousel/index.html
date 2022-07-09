@@ -9,7 +9,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer">
   </head>
   <body>
-    <h1>Carousel</h1>
+    <main class="main">
+      <section id="my_carousel" class="carousel" data-variant="light">
+        <ul class="carousel__inner">
+          <li class="carousel__item --active">
+            <img src="https://picsum.photos/400?random=1">
+          </li>
+          <li class="carousel__item">
+            <img src="https://picsum.photos/400?random=2">
+          </li>
+          <li class="carousel__item">
+            <img src="https://picsum.photos/400?random=3">
+          </li>
+        </ul>
+
+        <button class="carousel__control --prev" type="button">
+          <span class="carousel__icon --prev">
+            <i class="fa-solid fa-angle-left"></i>
+          </span>
+        </button>
+        <button class="carousel__control --next" type="button">
+          <span class="carousel__icon --next">
+            <i class="fa-solid fa-angle-right"></i>
+          </span>
+        </button>
+
+        <footer class="carousel__indicators">
+          <button type="button" class="--active"></button>
+          <button type="button"></button>
+          <button type="button"></button>
+        </footer>
+      </section>
+    </main>
 
     <script type="module" src="./src/scripts/main.js"></script>
   </body>
