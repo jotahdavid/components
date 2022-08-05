@@ -8,12 +8,12 @@
   position: relative;
 }
 
-.carousel[data-variant="light"],
-.carousel {
-  --dark-color: #BBBBBB;
+.carousel,
+.carousel[data-variant='light'] {
+  --dark-color: #bbbbbb;
   --active-color: #fff;
 }
-.carousel[data-variant="dark"] {
+.carousel[data-variant='dark'] {
   --dark-color: #717171;
   --active-color: #161616;
 }
@@ -23,18 +23,26 @@
   height: 100%;
 
   display: flex;
-  overflow: hidden;
 }
 
 .carousel__item,
-.carousel__item > img
-{
+.carousel__item > img {
   width: 100%;
   height: 100%;
 }
 
 .carousel__item {
-  flex-shrink: 0;
+  position: relative;
+  display: none;
+  float: left;
+  margin-right: -100%;
+  backface-visibility: hidden;
+}
+
+.carousel__item.--active,
+.carousel__item.--prev,
+.carousel__item.--next {
+  display: block;
 }
 
 .carousel__item > img {
