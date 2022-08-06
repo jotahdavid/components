@@ -1,10 +1,14 @@
 const CLASS_NAME_ACTIVE = '--active';
+const CLASS_NAME_NEXT = '--next';
+const CLASS_NAME_PREV = '--prev';
+const CLASS_NAME_START = '--start';
+const CLASS_NAME_END = '--end';
 
 const SELECTOR_ITEM = '.carousel__item';
-const SELECTOR_ARROW_PREV = '.carousel__control.--prev';
-const SELECTOR_ARROW_NEXT = '.carousel__control.--next';
 const SELECTOR_INDICATORS = '.carousel__indicators';
 const SELECTOR_ACTIVE = '.--active';
+
+const TRANSITION_END = 'transitionend';
 
 class Carousel {
   /**
@@ -84,10 +88,32 @@ class Carousel {
 
     const nextElementIndex = this.getItemIndex(nextElement);
 
-    activeElement.classList.remove(CLASS_NAME_ACTIVE);
-    nextElement.classList.add(CLASS_NAME_ACTIVE);
-
+    this._isSliding = true;
     this.setActiveIndicatorElement(nextElementIndex);
+
+    const directionalClassName = isNext ? CLASS_NAME_START : CLASS_NAME_END;
+    const orderClassName = isNext ? CLASS_NAME_NEXT : CLASS_NAME_PREV;
+
+    nextElement.classList.add(orderClassName);
+    this.reflow(nextElement);
+    activeElement.classList.add(directionalClassName);
+    nextElement.classList.add(directionalClassName);
+
+    const callback = () => {
+      nextElement.classList.remove(directionalClassName, orderClassName);
+      nextElement.classList.add(CLASS_NAME_ACTIVE);
+      activeElement.classList.remove(CLASS_NAME_ACTIVE, orderClassName, directionalClassName);
+      this._isSliding = false;
+    };
+
+    this.executeAfterTransition(callback, activeElement);
+  }
+
+  /**
+   * @param {Element} element
+   */
+  reflow(element) {
+    element.offsetHeight;
   }
 
   /**
@@ -108,6 +134,49 @@ class Carousel {
     index = (index + listLength) % listLength;
 
     return list[Math.max(0, Math.min(index, listLength - 1))];
+  }
+
+  /**
+   * @param {Function} callback
+   * @param {Element} element
+   */
+  executeAfterTransition(callback, element) {
+    const emulatedDuration = this.getTransitionDurationFromElement(element) + 5;
+
+    let called = false;
+
+    const handler = ({ target }) => {
+      if (target !== element) {
+        return;
+      }
+
+      called = true;
+      element.removeEventListener(TRANSITION_END, handler);
+      callback();
+    };
+
+    element.addEventListener(TRANSITION_END, handler);
+    setTimeout(() => {
+      if (!called) {
+        element.dispatchEvent(new Event(TRANSITION_END));
+      }
+    }, emulatedDuration);
+  }
+
+  /**
+   * @param {Element} element
+   */
+  getTransitionDurationFromElement(element) {
+    if (!element) {
+      return 0;
+    }
+
+    let { transitionDuration, transitionDelay } = window.getComputedStyle(element);
+
+    transitionDuration = transitionDuration.split(',')[0];
+    transitionDelay = transitionDelay.split(',')[0];
+
+    return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * 1000;
   }
 
   /**
