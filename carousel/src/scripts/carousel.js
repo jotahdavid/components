@@ -1,3 +1,5 @@
+const CLASS_NAME_ACTIVE = '--active';
+
 const SELECTOR_ITEM = '.carousel__item';
 const SELECTOR_ARROW_PREV = '.carousel__control.--prev';
 const SELECTOR_ARROW_NEXT = '.carousel__control.--next';
@@ -74,8 +76,7 @@ class Carousel {
 
     const activeElement = this.getActive();
     const isNext = order === 'next';
-    const nextElement =
-      element ?? this.getNextActiveElement(this.getItems(), activeElement, isNext);
+    const nextElement = element ?? this.getNextActiveElement(this.getItems(), activeElement, isNext);
 
     if (activeElement === nextElement) {
       return;
@@ -83,8 +84,8 @@ class Carousel {
 
     const nextElementIndex = this.getItemIndex(nextElement);
 
-    this.getActive().classList.remove(SELECTOR_ACTIVE.slice(1));
-    nextElement.classList.add(SELECTOR_ACTIVE.slice(1));
+    activeElement.classList.remove(CLASS_NAME_ACTIVE);
+    nextElement.classList.add(CLASS_NAME_ACTIVE);
 
     this.setActiveIndicatorElement(nextElementIndex);
   }
@@ -118,12 +119,12 @@ class Carousel {
     }
 
     const activeIndicator = this._indicatorsElement.querySelector(SELECTOR_ACTIVE);
-    activeIndicator.classList.remove(SELECTOR_ACTIVE.slice(1));
+    activeIndicator.classList.remove(CLASS_NAME_ACTIVE);
 
     const newActiveIndicator = this._indicatorsElement.querySelector(`[data-slide-to="${index}"]`);
 
     if (newActiveIndicator) {
-      newActiveIndicator.classList.add(SELECTOR_ACTIVE.slice(1));
+      newActiveIndicator.classList.add(CLASS_NAME_ACTIVE);
     }
   }
 
